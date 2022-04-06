@@ -7,6 +7,7 @@ import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_contactlist/Contact.dart';
 import 'package:http/http.dart' as http;
+import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
@@ -86,6 +87,21 @@ class HomepageState extends State<Homepage> {
       padding: const EdgeInsets.all(5),
       child: Align(alignment: Alignment.centerLeft, child: Text(string)),
     );
+  }
+
+  listTileAction(String name, String phone, String dateTime, String timeAgo) {
+    return IconButton(
+      icon: const Icon(Icons.share),
+      tooltip: 'Share Information',
+      onPressed: () {
+        onShareData(name, phone, dateTime, timeAgo);
+      },
+    );
+  }
+
+  onShareData(
+      String name, String phone, String dateTime, String timeago) async {
+    Share.share(name + "\n" + phone + "\n" + dateTime + "\n" + timeago);
   }
 
   // Function to fetch contact data from URL
@@ -235,6 +251,11 @@ class HomepageState extends State<Homepage> {
                             return Card(
                               child: ListTile(
                                 leading: userLogo(),
+                                trailing: listTileAction(
+                                    snapshot.data[index].getName(),
+                                    snapshot.data[index].getPhone(),
+                                    snapshot.data[index].getCheckInDate(),
+                                    timeAgoList[index]),
                                 title: Text(
                                   snapshot.data[index].getName(),
                                   style: TextStyle(fontSize: 20),
